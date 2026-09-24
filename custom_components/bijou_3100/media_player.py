@@ -7,7 +7,11 @@ from homeassistant.components.media_player.const import (
     MediaPlayerState,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.device_registry import (
+    CONNECTION_NETWORK_MAC,
+    DeviceInfo,
+    format_mac,
+)
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -48,6 +52,7 @@ class BijouMediaPlayer(CoordinatorEntity[BijouCoordinator], MediaPlayerEntity):
         self._attr_sound_mode_list = list(SOUND_MODE_ARGS)
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, state.serial)},
+            connections={(CONNECTION_NETWORK_MAC, format_mac(state.mac_address))},
             name=coordinator.model,
             manufacturer=MANUFACTURER,
             model=coordinator.model,
