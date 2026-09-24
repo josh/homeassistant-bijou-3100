@@ -72,13 +72,16 @@ def _as_optional_int(value: str) -> int | None:
 
 
 def parse_state(main: MainPage, info: InfoPage, eq: EqPage) -> BijouState:
+    # The amplifier keeps serving its last decoded formats after it powers down,
+    # so they are only meaningful while it is on.
+    is_on = main["powerstate"] == "1"
     return BijouState(
         serial=main["serial"],
         hostname=main["hostname"],
         mac_address=main["macaddr"].lower(),
         mcu_version=main["mcuversion"],
         dsp_version=main["dspversion"],
-        is_on=main["powerstate"] == "1",
+        is_on=is_on,
         volume=_as_int(main["spvolume"]),
         is_muted=main["spmute"] == "1",
         headphone_volume=_as_int(main["hpvolume"]),
@@ -87,8 +90,8 @@ def parse_state(main: MainPage, info: InfoPage, eq: EqPage) -> BijouState:
         subwoofer_muted=main["submute"] == "1",
         source=SOURCES.get(main["audiosel"]),
         sound_mode=SOUND_MODES.get(main["audiomode"]),
-        input_format=main["audioinformat"] or None,
-        output_format=main["audioout"] or None,
+        input_format=(main["audioinformat"] or None) if is_on else None,
+        output_format=(main["audioout"] or None) if is_on else None,
         temperature=_as_optional_int(info["tsense"]),
         eq_enabled=eq["eqenable"] == "1",
     )
