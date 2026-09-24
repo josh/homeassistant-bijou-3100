@@ -6,7 +6,17 @@ from urllib.parse import quote
 
 from aiohttp import ClientError, ClientSession, ClientTimeout
 
-from .const import SOUND_MODES, SOURCES, EqPage, InfoPage, MainPage
+from .const import (
+    LINE_OUTPUT_GAINS,
+    POWER_OFF_TIMERS,
+    POWER_RECOVERIES,
+    SOUND_MODES,
+    SOURCES,
+    EqPage,
+    InfoPage,
+    MainPage,
+    SysPage,
+)
 
 TIMEOUT = ClientTimeout(total=10)
 TITLE_PATTERN = re.compile(r"<title>([^<]+)</title>", re.IGNORECASE)
@@ -55,6 +65,11 @@ class BijouState:
     output_format: str | None
     temperature: int | None
     eq_enabled: bool
+    on_volume: int
+    max_volume: int
+    line_output_gain: str | None
+    power_recovery: str | None
+    power_off_timer: str | None
 
 
 def _as_int(value: str) -> int:
@@ -71,7 +86,7 @@ def _as_optional_int(value: str) -> int | None:
         return None
 
 
-def parse_state(main: MainPage, info: InfoPage, eq: EqPage) -> BijouState:
+def parse_state(main: MainPage, info: InfoPage, eq: EqPage, sys: SysPage) -> BijouState:
     # The amplifier keeps serving its last decoded formats after it powers down,
     # so they are only meaningful while it is on.
     is_on = main["powerstate"] == "1"
@@ -94,6 +109,11 @@ def parse_state(main: MainPage, info: InfoPage, eq: EqPage) -> BijouState:
         output_format=(main["audioout"] or None) if is_on else None,
         temperature=_as_optional_int(info["tsense"]),
         eq_enabled=eq["eqenable"] == "1",
+        on_volume=_as_int(sys["sponvol"]),
+        max_volume=_as_int(sys["spvollimit"]),
+        line_output_gain=LINE_OUTPUT_GAINS.get(sys["lineoutlevel"]),
+        power_recovery=POWER_RECOVERIES.get(sys["poweronstate"]),
+        power_off_timer=POWER_OFF_TIMERS.get(sys["offtimer"]),
     )
 
 
@@ -120,13 +140,17 @@ class BijouClient:
         return cast(dict[str, Any], payload)
 
     async def fetch(self) -> BijouState:
-        main, info, eq = await asyncio.gather(
+        main, info, eq, sys = await asyncio.gather(
             self._fetch_page("mainpage", MainPage.__required_keys__),
             self._fetch_page("infopage", InfoPage.__required_keys__),
             self._fetch_page("eqpage", EqPage.__required_keys__),
+            self._fetch_page("syspage", SysPage.__required_keys__),
         )
         state = parse_state(
-            cast(MainPage, main), cast(InfoPage, info), cast(EqPage, eq)
+            cast(MainPage, main),
+            cast(InfoPage, info),
+            cast(EqPage, eq),
+            cast(SysPage, sys),
         )
         if not state.serial:
             raise UnsupportedModel("The device did not report a serial number")

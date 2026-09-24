@@ -5,7 +5,13 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import BijouClient
 from .coordinator import BijouConfigEntry, BijouCoordinator
 
-PLATFORMS = [Platform.MEDIA_PLAYER, Platform.SENSOR, Platform.SWITCH]
+PLATFORMS = [
+    Platform.MEDIA_PLAYER,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: BijouConfigEntry) -> bool:

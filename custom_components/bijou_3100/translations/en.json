@@ -61,6 +61,40 @@
       "equalizer": {
         "name": "Equalizer"
       }
+    },
+    "number": {
+      "on_volume": {
+        "name": "Power-on volume"
+      },
+      "max_volume": {
+        "name": "Maximum volume"
+      }
+    },
+    "select": {
+      "line_output_gain": {
+        "name": "Line output gain",
+        "state": {
+          "low": "Low (0.5 Vrms)",
+          "medium": "Medium (1 Vrms)",
+          "high": "High (2 Vrms)"
+        }
+      },
+      "power_recovery": {
+        "name": "Power recovery",
+        "state": {
+          "last": "Last state",
+          "on": "On",
+          "off": "Off"
+        }
+      },
+      "power_off_timer": {
+        "name": "Auto power-off",
+        "state": {
+          "never": "Never",
+          "10_minutes": "10 minutes",
+          "5_hours": "5 hours"
+        }
+      }
     }
   }
 }
