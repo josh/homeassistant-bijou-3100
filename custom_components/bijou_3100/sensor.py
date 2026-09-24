@@ -39,12 +39,12 @@ DESCRIPTIONS = (
     BijouSensorEntityDescription(
         key="input_format",
         translation_key="input_format",
-        value_fn=lambda state: state.input_format or None,
+        value_fn=lambda state: state.input_format,
     ),
     BijouSensorEntityDescription(
         key="output_format",
         translation_key="output_format",
-        value_fn=lambda state: state.output_format or None,
+        value_fn=lambda state: state.output_format,
     ),
 )
 

@@ -81,10 +81,11 @@ class BijouMediaPlayer(CoordinatorEntity[BijouCoordinator], MediaPlayerEntity):
     @property
     def extra_state_attributes(self) -> dict[str, str]:
         state = self.coordinator.data
-        return {
+        formats = {
             "input_format": state.input_format,
             "output_format": state.output_format,
         }
+        return {k: v for k, v in formats.items() if v is not None}
 
     async def async_turn_on(self) -> None:
         await self.coordinator.async_send("SET POWER ON", lambda state: state.is_on)

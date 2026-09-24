@@ -51,8 +51,8 @@ class BijouState:
     subwoofer_muted: bool
     source: str | None
     sound_mode: str | None
-    input_format: str
-    output_format: str
+    input_format: str | None
+    output_format: str | None
     temperature: int | None
     eq_enabled: bool
 
@@ -87,8 +87,8 @@ def parse_state(main: MainPage, info: InfoPage, eq: EqPage) -> BijouState:
         subwoofer_muted=main["submute"] == "1",
         source=SOURCES.get(main["audiosel"]),
         sound_mode=SOUND_MODES.get(main["audiomode"]),
-        input_format=main["audioinformat"],
-        output_format=main["audioout"],
+        input_format=main["audioinformat"] or None,
+        output_format=main["audioout"] or None,
         temperature=_as_optional_int(info["tsense"]),
         eq_enabled=eq["eqenable"] == "1",
     )
