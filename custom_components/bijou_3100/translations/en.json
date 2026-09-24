@@ -1,0 +1,66 @@
+{
+  "title": "Bijou 3100",
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "title": "Connect to Bijou 3100",
+        "description": "Control an AudioControl Bijou 3100 amplifier over your local network. The amplifier needs no credentials.",
+        "data": {
+          "host": "Host",
+          "scan_interval": "Polling interval (seconds)"
+        }
+      },
+      "reconfigure": {
+        "title": "Connect to Bijou 3100",
+        "description": "Control an AudioControl Bijou 3100 amplifier over your local network. The amplifier needs no credentials.",
+        "data": {
+          "host": "Host",
+          "scan_interval": "Polling interval (seconds)"
+        }
+      },
+      "discovery_confirm": {
+        "title": "Add {model}",
+        "description": "Set up the {model} amplifier found at {host}?"
+      }
+    },
+    "error": {
+      "invalid_host": "Enter an IPv4 address or hostname without a scheme or port.",
+      "unsupported_model": "That address answered, but does not look like a Bijou amplifier.",
+      "cannot_connect": "Unable to read the amplifier's status. Check the address and that the amplifier is on the network."
+    },
+    "abort": {
+      "already_configured": "This amplifier is already configured.",
+      "wrong_device": "The address belongs to a different amplifier.",
+      "cannot_connect": "Unable to read the amplifier's status.",
+      "reconfigure_successful": "Configuration updated."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {
+        "name": "Temperature"
+      },
+      "input_format": {
+        "name": "Input format"
+      },
+      "output_format": {
+        "name": "Output format"
+      }
+    },
+    "switch": {
+      "subwoofer_mute": {
+        "name": "Subwoofer mute"
+      },
+      "headphone_mute": {
+        "name": "Headphone mute"
+      },
+      "headphone_volume_follow": {
+        "name": "Headphone volume follows speaker"
+      },
+      "equalizer": {
+        "name": "Equalizer"
+      }
+    }
+  }
+}

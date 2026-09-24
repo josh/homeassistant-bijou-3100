@@ -1,0 +1,12 @@
+{
+  "domain": "bijou_3100",
+  "name": "Bijou 3100",
+  "codeowners": ["@josh"],
+  "config_flow": true,
+  "dhcp": [{ "hostname": "b3100-*" }, { "macaddress": "188A6A*" }],
+  "documentation": "https://github.com/josh/homeassistant-bijou-3100",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/josh/homeassistant-bijou-3100/issues",
+  "version": "0.0.0"
+}
